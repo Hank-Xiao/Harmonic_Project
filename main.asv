@@ -1,0 +1,59 @@
+%%% 蜣螂优化(DBO)算法在6个工程优化问题上的应用 %%%
+%%% 2023.01.08 %%%
+%%% By 后会无期 %%%
+%%%%%%%%%%% 问题清单 %%%%%%%%%%%%%%
+%  1.压力容器设计(Pressure vessel design)                     %
+%  2.滚动轴承设计(Rolling element bearing design)             %
+%  3.拉伸/压缩弹簧设计(Tension/compression spring design)      %
+%  4.悬臂梁设计(Cantilever beam design)                       %
+%  5.轮系设计(Gear train design)                              %
+%  6.三杆桁架设计(Three bar truss design)                     %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 微信公众号：启发式算法讨论 %%
+
+
+clc;
+clear;
+digits(45);
+
+Problem_name=[{'Pressure vessel design'},{'Rolling element bearing design'},...
+    {'Tension/compression spring design'},{'Cantilever beam design'},...
+    {'Gear train design'},{'Three bar truss design'}];
+
+MaxIt=1000; %最大迭代次数
+PopSize=30; %种群规模，注意：DBO的种群只能取30的倍数
+
+Number=3; %问题编号，自行改动：1 2 3 4 5 6
+
+[BestX,BestF,Curve]=DBO(Number,MaxIt,PopSize);
+
+% if Number==2 || Number==3
+%     BestX(2)=round(BestX(2));
+% elseif  Number==5
+%     BestX=round(BestX);
+% end
+
+
+format long e;
+disp(['The best fitness of ',Problem_name{Number},' is: ']);
+fprintf('%40.30f\n', BestF);
+display(['The best solution is: ', regexprep(num2str(BestX),'\s*',';')]);
+
+
+% 画图(收敛曲线)
+
+if Number==2
+    Curve=-Curve;
+    %滚动轴承设计(Rolling element bearing design)是最大化问题，处理成了最小化问题，因此收敛曲线需要再加一个负号
+
+    plot(Curve,'k','LineWidth',2);
+else
+    semilogy(Curve,'k','LineWidth',2);
+end
+
+hold on
+xlabel('Iterations');
+ylabel('Fitness');
+title('损失函数');
+grid on;
+legend('二范数');
