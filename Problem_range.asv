@@ -2,7 +2,7 @@ function [Lu,Up,Dim]=Problem_range(Number)
 
 
 switch Number
-    case 3 %拉伸/压缩弹簧设计(Tension/compression spring design)
+    case 3 
         % Lu=[0 0 0 0 0 0 0 0 0 0 0 0 0 130 0 0 270 0 0 330 0];
         % Up=[2*pi 25 2*pi 25 2*pi 25 2*pi 25 2*pi 25 50 2*pi 25 230 2*pi 25 330 2*pi 25 430 2*pi];
         % Dim=21;
