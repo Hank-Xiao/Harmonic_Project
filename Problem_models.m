@@ -3,53 +3,6 @@ function Fit=Problem_models(x,Number)
 
 switch Number
 
-    case 1 %压力容器设计(Pressure vessel design)
-        lambda=10^20;
-        g(1)=-x(1)+0.0193*x(3);
-        g(2)=-x(2)+0.00954*x(3);
-        g(3)= -pi*x(3)^2*x(4)-(4/3)*pi*x(3)^3+1296000;
-        g(4)= x(4)-240;
-        f=0.6224*x(1)*x(3)*x(4)+1.7781*x(2)*x(3)^2+3.1661*x(1)^2*x(4)+19.84*x(1)^2*x(3);
-        Penalty=0;
-        for i=1:length(g)
-            Penalty= Penalty+ lambda*g(i)^2*GetInequality(g(i));
-        end
-        Fit=f+Penalty;
-
-    case 2 %滚动轴承设计(Rolling element bearing design)
-        x(3)=round(x(3));
-        lambda=10^20;
-        D=160;
-        d=90;
-        Bw=30;
-        T=D-d-2*x(2);
-        phio=2*pi-2*acos(((((D-d)/2)-3*(T/4))^2+(D/2-T/4-x(2))^2-(d/2+T/4)^2)...
-            /(2*((D-d)/2-3*(T/4))*(D/2-T/4-x(2))));
-        g(1)=-phio/(2*asin(x(2)/x(1)))+x(3)-1;
-        g(2)=-2*x(2)+x(6)*(D-d);
-        g(3)= -x(7)*(D-d)+2*x(2);
-        g(4)=(0.5-x(9))*(D+d)-x(1);
-        g(5)=-(0.5+x(9))*(D+d)+x(1);
-        g(6)=-x(1)+0.5*(D+d);
-        g(7)= -0.5*(D-x(1)-x(2))+x(8)*x(2);
-        g(8)=x(10)*Bw-x(2);
-        g(9)=0.515-x(4);
-        g(10)=0.515-x(5);
-        Penalty=0;
-        for i=1:length(g)
-            Penalty= Penalty+ lambda*g(i)^2*GetInequality(g(i));
-        end
-        gama=x(2)/x(1);
-        fc=37.91*((1+(1.04*((1-gama/1+gama)^1.72)*((x(4)*(2*x(5)-1)/x(5)*...
-            (2*x(4)-1))^0.41))^(10/3))^-0.3)*((gama^0.3*(1-gama)^1.39)/...
-            (1+gama)^(1/3))*(2*x(4)/(2*x(4)-1))^0.41;
-        if x(2)<=25.4
-            f=-fc*x(3)^(2/3)*x(2)^1.8;
-        else
-            f=-3.647*fc*x(3)^(2/3)*x(2)^1.4;
-        end
-        Fit=f+Penalty;
-
     case 3 %拉伸/压缩弹簧设计(Tension/compression spring design）            
         % x=0.447*cos(19.75*2*pi*t+x(1))+x(2)*cos(2*19.75*2*pi*t+x(3))+x(4)*cos(3*19.75*2*pi*t+x(5))+x(6)*cos(4*19.75*2*pi*t+x(7));
         % y=0.5*cos(19.75*2*pi*t+pi/9)+1*cos(2*19.75*2*pi*t+pi/6)+2*cos(3*19.75*2*pi*t+pi/3)+3*cos(4*19.75*2*pi*t+pi/2);
@@ -103,36 +56,6 @@ switch Number
 
         %二范数
          f=norm(x-y,2);
-
-
-    case 4 %悬臂梁设计(Cantilever beam design)
-        lambda=10^20;
-        g(1)=61/x(1)^3+37/x(2)^3+19/x(3)^3+7/x(4)^3+1/x(5)^3-1;
-        f=0.0624*(x(1)+x(2)+x(3)+x(4)+x(5));
-        Penalty=0;
-        for i=1:length(g)
-            Penalty= Penalty+ lambda*g(i)^2*GetInequality(g(i));
-        end
-        Fit=f+Penalty;
-
-    case 5 %轮系设计(Gear train design)
-        x=round(x);
-        Fit=(1/6.931-(x(3)*x(2)/(x(1)*x(4))))^2;
-
-    case 6 %三杆桁架设计(Three bar truss design) 
-        lambda=10^20;
-        l=100;
-        P=2;
-        o=2;
-        g(1)=((sqrt(2)*x(1)+x(2))/(sqrt(2)*x(1)^2+2*x(1)*x(2)))*P-o;
-        g(2)=(x(2)/(sqrt(2)*x(1)^2+2*x(1)*x(2)))*P-o;
-        g(3)=(1/(sqrt(2)*x(2)+x(1)))*P-o;
-        f=(2*sqrt(2)*x(1)+x(2))*l;
-        Penalty=0;
-        for i=1:length(g)
-            Penalty= Penalty+ lambda*g(i)^2*GetInequality(g(i));
-        end
-        Fit=f+Penalty;
 
 end
 
